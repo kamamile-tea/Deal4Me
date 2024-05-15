@@ -4,6 +4,7 @@ import Image from "next/image";
 import NavBar from "./components/NavBar";
 import Button from '@mui/material/Button';
 import { useState } from 'react';
+import CouponCard from "./components/CouponCard";
 
 export default function Home() {
   const [coupons, setCoupons] = useState([]);
@@ -17,7 +18,7 @@ export default function Home() {
       <div>
          <Button onClick={() => {getCoupons()}}>hello</Button>
          {coupons.map((coupon, index) => 
-          <p key = {index}>COUPON {coupon["description"]}</p>
+          <CouponCard key = {index} description={coupon["description"]}/>
          )}
       </div>
 
