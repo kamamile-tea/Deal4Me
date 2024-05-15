@@ -24,17 +24,24 @@ const getCoupons = async (req: NextApiRequest, res: NextApiResponse) => {
 
   coupons = coupons["coupons"];
   let filteredCoupons = [];
+  let matches  = [];
+  let matchAmount;
 
-  for(let i = 0; i < couponCount; i++){
-    for(let j = 0; j < keywords.length; j++){
-      if(coupons[i]["description"].toLowerCase().includes(keywords[j])){
-        filteredCoupons.push(coupons[i]);
+  for(let i = 0; i < keywords.length; i++){
+    matchAmount = 0;
+    for(let j = 0; j < couponCount; j++){
+      if(coupons[j]["description"].toLowerCase().includes(keywords[i])){
+        filteredCoupons.push(coupons[j]);
+        matchAmount = matchAmount + 1;
       }
     }
+    matches.push(matchAmount);
   }
 
-  console.log(filteredCoupons);
-  res.status(200).json({ filteredCoupons });
+  let data = {filteredCoupons, matches, "filteredCouponsLen": filteredCoupons.length}
+
+  console.log(data);
+  res.status(200).json(data);
 }
 
 export default getCoupons
