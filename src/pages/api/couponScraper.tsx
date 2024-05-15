@@ -2,7 +2,7 @@ import { writeFile } from 'node:fs'
 import { cookies } from 'next/headers'
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const keywords = ["nail", "deodorant", "allegra"];
+const keywords = ["nail", "deodorant", "allegra", "cake"];
 
 const retailerCouponSite = 'https://www.walgreens.com/offers/v1/svc/coupons/recommended';
 let couponCount;
@@ -25,7 +25,8 @@ const getCoupons = async (req: NextApiRequest, res: NextApiResponse) => {
   coupons = coupons["coupons"];
   let filteredCoupons = [];
   let matches  = [];
-  let matchAmount;
+  let matchAmount = 0;
+  let keywordMatch = [];
 
   for(let i = 0; i < keywords.length; i++){
     matchAmount = 0;
@@ -35,10 +36,13 @@ const getCoupons = async (req: NextApiRequest, res: NextApiResponse) => {
         matchAmount = matchAmount + 1;
       }
     }
-    matches.push(matchAmount);
+    if(matchAmount != 0){
+      keywordMatch.push(keywords[i]);
+      matches.push(matchAmount);
+    }
   }
 
-  let data = {filteredCoupons, matches, "filteredCouponsLen": filteredCoupons.length}
+  let data = {filteredCoupons, matches, "filteredCouponsLen": filteredCoupons.length, "keywordMatch": keywordMatch}
 
   console.log(data);
   res.status(200).json(data);
